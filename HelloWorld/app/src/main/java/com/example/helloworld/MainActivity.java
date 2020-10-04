@@ -14,13 +14,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //restore this activity's state
+        if(savedInstanceState != null){
+            String restoredStr = savedInstanceState.getString("key");
+        }
         Button btnexit = (Button) findViewById(R.id.btn_exit);
         btnexit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Exit Confirming");
+                builder.setTitle("Confirming Your Exit");
                 builder.setMessage("Apa anda benar-benar ingin keluar?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                     @Override
@@ -36,6 +39,16 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outstate){
+        outstate.putString("key", "Welcome Back");
+        super.onSaveInstanceState(outstate); //save state
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        String restoredMsg = savedInstanceState.getString("key");
     }
 
 }
