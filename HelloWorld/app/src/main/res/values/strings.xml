@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HelloWorld</string>
+    <string name="scan_the_wifi">Scan the WiFi</string>
 </resources>
