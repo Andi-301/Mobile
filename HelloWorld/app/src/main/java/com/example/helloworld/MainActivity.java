@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
         }
 
-        /***
+
         @Override
         public void onMessage(WebSocket webSocket, String text) {
             output("Receiving : " + text);
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         public void onFailure(WebSocket webSocket, Throwable t, Response response) {
             output("Error : " + t.getMessage());
         }
-        ***/
+
     }
 
     @Override
@@ -116,6 +116,15 @@ public class MainActivity extends AppCompatActivity {
             Request request = new Request.Builder().url("ws://echo.websocket.org").build();
             EchoWebSocketListener listener = new EchoWebSocketListener();
             WebSocket ws = client.newWebSocket(request, listener);
+            client.dispatcher().executorService().shutdown();
         }
     };
+    private void output(final String txt) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                output.setText(output.getText().toString() + "\n\n" + txt);
+            }
+        });
+    }
 }
