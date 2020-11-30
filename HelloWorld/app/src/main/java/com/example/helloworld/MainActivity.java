@@ -38,6 +38,42 @@ public class MainActivity extends AppCompatActivity {
     private TextView output;
     private OkHttpClient client;
 
+    private final class EchoWebSocketListener extends WebSocketListener {
+        private static final int NORMAL_CLOSURE_STATUS = 1000;
+
+        @Override
+        public void onOpen(WebSocket webSocket, Response response) {
+            for (String wifi_name: arrayList){
+                webSocket.send(wifi_name);
+            }
+            webSocket.send(ByteString.decodeHex("deadbeef"));
+            webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
+        }
+
+        /***
+        @Override
+        public void onMessage(WebSocket webSocket, String text) {
+            output("Receiving : " + text);
+        }
+
+        @Override
+        public void onMessage(WebSocket webSocket, ByteString bytes) {
+            output("Receiving bytes : " + bytes.hex());
+        }
+
+        @Override
+        public void onClosing(WebSocket webSocket, int code, String reason) {
+            webSocket.close(NORMAL_CLOSURE_STATUS, null);
+            output("Closing : " + code + " / " + reason);
+        }
+
+        @Override
+        public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            output("Error : " + t.getMessage());
+        }
+        ***/
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
                 arrayList.add(scanResult.SSID + " - " + scanResult.capabilities);
                 adapter.notifyDataSetChanged();
             }
+            Request request = new Request.Builder().url("ws://echo.websocket.org").build();
+            EchoWebSocketListener listener = new EchoWebSocketListener();
+            WebSocket ws = client.newWebSocket(request, listener);
         }
     };
 }
