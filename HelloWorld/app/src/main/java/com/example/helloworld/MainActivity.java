@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         public void onOpen(WebSocket webSocket, Response response) {
             for (String wifi_name: arrayList){
                 webSocket.send(wifi_name);
+                webSocket.send(ByteString.decodeHex(wifi_name));
             }
-            webSocket.send(ByteString.decodeHex("deadbeef"));
             webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye !");
         }
 
